@@ -32,7 +32,7 @@ for line in textFile:
     if re.match(r'──Error', line):
         thisOn = False
     if thisOn:
-        print(line)
+        #print(line)
         errorHowToList.append(line)
 
 res = list()
@@ -64,10 +64,10 @@ con = pymysql.connect('localhost', 'bdadmin', 'ulluauz5a', 'TestBase')
 with con:
     cur = con.cursor()
     for i in range(76):
-        cur.execute(f"INSERT INTO Errors (Number, Description, Correction) VALUES ({errorNumberList[i], errorTextList[i], part[i]})")
+        cur.execute(f"INSERT INTO Errors (Number, Description, Correction) VALUES ({errorNumberList[i], errorTextList[i], parts[i]})")
 
     version = cur.fetchone()
-
+con.close()
 print('success')
 # bdadmin
 # ulluauz5a
