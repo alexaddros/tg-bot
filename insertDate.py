@@ -59,7 +59,7 @@ for part in parts:
 textFile.close()
 
 
-con = pymysql.connect('localhost', 'bdadmin', 'ulluauz5a', 'TestBase')
+con = pymysql.connect('localhost', 'root', 'Koordinator1414a', 'TestBase')
 
 with con:
     cur = con.cursor()
@@ -69,6 +69,6 @@ with con:
     version = cur.fetchone()
 con.close()
 print('success')
-# bdadmin
-# ulluauz5a
+# root
+# Koordinator1414a
 # TestBase
