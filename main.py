@@ -60,8 +60,8 @@ class DialogBot(object):
             with open('log.txt', 'rb') as doc:
                 bot.send_document(chat_id, doc, caption=answer)
         elif answer[0] == '$':
-            # bot.sendMessage(chat_id=274354611, text=answer) -- отправка в чат лично человеку
-            bot.sendMessage(chat_id=-438860045, text=answer)
+            bot.sendMessage(chat_id=274354611, text=answer) #-- отправка в чат лично человеку
+            #bot.sendMessage(chat_id=-438860045, text=answer)
         else:
             pass
 
