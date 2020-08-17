@@ -36,7 +36,7 @@ class DialogBot(object):
         else:
             answer = next(self.handlers[chat_id])
 
-        print("Answer: %r" % answer)
+        # print("Answer: %r" % answer)
         if answer == 'Выберите:':
             variants = ['1', '2', '3']
             bot.sendMessage(chat_id=chat_id, text=answer, reply_markup=ReplyKeyboardMarkup([variants]))
@@ -51,29 +51,18 @@ class DialogBot(object):
 
 
 def dialog():
-    answer = yield "Выберите:"
-    choice = answer.text.strip()
-    if choice == '1':
-        answer = yield from number_request()
-    elif choice == '2':
-        answer = yield 'Ваш файл.'
-    elif choice == '3':
-        answer = yield f'$ Пользователь {answer.chat.username} Обратился в службу поддержки.'
+    answer = yield "Введите код ошибки"
+    number = answer.text.strip()
 
-
-def number_request():
-    con = pymysql.connect('localhost', 'root', 'Koordinator1414a', 'TestBase')
-    cur = con.cursor()
-    answer = yield 'Введите номер ошибки'
-    answer = answer.strip()
     try:
-        cur.execute(f'SELECT * FROM Errors WHERE Number={answer}')
+        con = pymysql.connect('localhost', 'root', 'Koordinator1414a', 'TestBase')
+        cur = con.cursor()
+        cur.execute(f'SELECT * FROM Errors WHERE Number={number}')
         record = cur.fetchone()
     except:
         return 'Данный номер не найден в базе. Повторите попытку.'
 
     return f'Number: {record[0]}\nDescription: {record[1]}\n How to fix: {record[2]}'
-
 
 if __name__ == "__main__":
     dialog_bot = DialogBot('1259925974:AAH3PsqjF16ic-079HhA-kDtCB8AKRtG_ZI', dialog)
