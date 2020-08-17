@@ -37,17 +37,9 @@ class DialogBot(object):
             answer = next(self.handlers[chat_id])
 
         # print("Answer: %r" % answer)
-        if answer == 'Выберите:':
-            variants = ['1', '2', '3']
-            bot.sendMessage(chat_id=chat_id, text=answer, reply_markup=ReplyKeyboardMarkup([variants]))
-        elif answer == 'Ваш файл.':
-            with open('log.txt', 'rb') as doc:
-                bot.send_document(chat_id, doc, caption=answer)
-        elif answer[0] == '$':
-            bot.sendMessage(chat_id=274354611, text=answer)
-            # bot.sendMessage(chat_id=-438860045, text=answer)
-        else:
-            pass
+        bot.sendMessage(chat_id=chat_id, text=answer)
+        # bot.sendMessage(chat_id=274354611, text=answer)
+        # bot.sendMessage(chat_id=-438860045, text=answer)
 
 
 def dialog():
