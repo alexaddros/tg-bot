@@ -46,15 +46,19 @@ def dialog():
     answer = yield "Введите код ошибки"
     number = answer.text.strip()
 
+    con = pymysql.connect('localhost', 'root', 'Koordinator1414a', 'TestBase')
+    cur = con.cursor()
+    cur.execute(f'SELECT * FROM Errors WHERE Number={number}')
+    record = cur.fetchone()
+    
     try:
-        con = pymysql.connect('localhost', 'root', 'Koordinator1414a', 'TestBase')
-        cur = con.cursor()
-        cur.execute(f'SELECT * FROM Errors WHERE Number={number}')
-        record = cur.fetchone()
+        return f'Number: {record[0]}\nDescription: {record[1]}\n How to fix: {record[2]}'
     except:
         return 'Данный номер не найден в базе. Повторите попытку.'
 
-    return f'Number: {record[0]}\nDescription: {record[1]}\n How to fix: {record[2]}'
+
+def ask_number():
+    pass
 
 if __name__ == "__main__":
     dialog_bot = DialogBot('1259925974:AAH3PsqjF16ic-079HhA-kDtCB8AKRtG_ZI', dialog)
