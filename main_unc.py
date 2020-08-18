@@ -35,30 +35,30 @@ class DialogBot(object):
                 return self.handle_message(bot, update)
         else:
             answer = next(self.handlers[chat_id])
-
-        # print("Answer: %r" % answer)
+        print("Answer: %r" % answer)
         bot.sendMessage(chat_id=chat_id, text=answer)
         # bot.sendMessage(chat_id=274354611, text=answer)
         # bot.sendMessage(chat_id=-438860045, text=answer)
 
-
 def dialog():
-    answer = yield "Enter number"
-    number = answer.text.strip()
-
+    answer = yield "Welcome! Enter the error number"
+    num = answer.text
     con = pymysql.connect('localhost', 'root', 'Koordinator1414a', 'TestBase')
     cur = con.cursor()
-    cur.execute(f'SELECT * FROM Errors WHERE Number={number}')
-    record = cur.fetchone()
-    
+    record = cur.execute(f"SELECT * FROM Errors WHERE Number={num}")
+    cur.submit()
+    con.close()
     try:
-        return f'Number: {record[0]}\nDescription: {record[1]}\n How to fix: {record[2]}'
+        answer = yield f'Number: {record[0]}\nDescription: {record[1]}\nHow to fix: {record[2]}'
     except:
-        return 'Database can not find this error. Please, retry.'
+        answer = yield 'This error can not be found in database. Please, retry.'
 
+def ask_yes_or_no(question):
+    answer = yield question
+    while not ("да" in answer.text.lower() or "нет" in answer.text.lower()):
+        answer = yield "Так да или нет?"
+    return "да" in answer.text.lower()
 
-def ask_number():
-    pass
 
 if __name__ == "__main__":
     dialog_bot = DialogBot('1259925974:AAH3PsqjF16ic-079HhA-kDtCB8AKRtG_ZI', dialog)
