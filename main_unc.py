@@ -43,7 +43,7 @@ class DialogBot(object):
 
 
 def dialog():
-    answer = yield "Введите код ошибки"
+    answer = yield "Enter number"
     number = answer.text.strip()
 
     con = pymysql.connect('localhost', 'root', 'Koordinator1414a', 'TestBase')
@@ -54,7 +54,7 @@ def dialog():
     try:
         return f'Number: {record[0]}\nDescription: {record[1]}\n How to fix: {record[2]}'
     except:
-        return 'Данный номер не найден в базе. Повторите попытку.'
+        return 'Database can not find this error. Please, retry.'
 
 
 def ask_number():
