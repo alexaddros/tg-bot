@@ -91,8 +91,8 @@ def error_number_grab():
     num = answer.text
     con = pymysql.connect('localhost', 'root', 'Koordinator1414a', 'TestBase')
     cur = con.cursor()
-    record = cur.execute(f"SELECT * FROM Errors WHERE Number={num}")
-    cur.submit()
+    cur.execute(f"SELECT * FROM Errors WHERE Number={num}")
+    record = cur.fetchone()
     con.close()
 
     try:
