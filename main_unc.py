@@ -51,8 +51,8 @@ class DialogBot(object):
         else:
             answer = next(self.handlers[chat_id])
 
-        if answer.text == "Welcome!\n Choose menu option.":
-            bot.sendMessage(chat_id=chat_id, text=answer.text, reply_markup=ReplyKeyboardMarkup([['Search error', 'FAQ', 'Support request']]), one_time_keyboard=True)
+        if answer.text == "Здравствуйте!\n Выберите пункт меню.":
+            bot.sendMessage(chat_id=chat_id, text=answer.text, reply_markup=ReplyKeyboardMarkup([['Поиск ошибки по номеру', 'FAQ', 'Служба Поддержки']]), one_time_keyboard=True)
         elif answer.text[0] == '$':
             answer = answer[1:]
             bot.sendMessage(chat_id=-438860045, text=answer.text)
@@ -71,12 +71,12 @@ def dialog():
     """
         Main menu
     """
-    answer = yield Message('Welcome!\n Choose menu option.')
-    if answer.text == 'Search error':
+    answer = yield Message('Здравствуйте!\n Выберите пункт меню.')
+    if answer.text == 'Поиск ошибки по номеру':
         answer = yield from error_number_grab()
     elif answer.text == 'FAQ':
-        yield Message("There are simple FAQ option.\n1. Robot or another product are not working?\n -- Try to reload it.\n2. You want to increase amount of product, transporting through the robot?\n -- You can't.", {'reply_markup': ReplyKeyboardRemove(), 'parse_mode': 'HTML'})
-    elif answer.text == 'Support request':
+        yield Message("Здесь будет любой FAQ.\n<b>Во всех сообщениях бота можно использовать HTML разметку и <i>Markdown</i> разметку</b>", {'reply_markup': ReplyKeyboardRemove(), 'parse_mode': 'HTML'})
+    elif answer.text == 'Служба Поддержки':
         yield from support_request()
     elif answer.text == 'printr':
         answer = yield from print_requests()
@@ -87,7 +87,7 @@ def error_number_grab():
         When user wants to search an information about error in database
     """
 
-    answer = yield Message("Enter the error number", {'reply_markup': ReplyKeyboardRemove()})
+    answer = yield Message("Введите номер ошибки", {'reply_markup': ReplyKeyboardRemove()})
     num = answer.text
     con = pymysql.connect('localhost', 'root', 'Koordinator1414a', 'TestBase')
     cur = con.cursor()
@@ -96,9 +96,9 @@ def error_number_grab():
     con.close()
 
     try:
-        answer = yield Message(f'Number: {record[0]}\nDescription: {record[1]}\nHow to fix: {record[2]}')
+        answer = yield Message(f'Number: {record[1]}\nDescription: {record[2]}\nHow to fix: {record[3]}')
     except:
-        answer = yield Message('This error can not be found in database. Please, retry.')
+        answer = yield Message('Данная ошибка не найдена в базе. Пожалуйста, повторите попытку.')
 
 
 def support_request():
@@ -106,15 +106,15 @@ def support_request():
         When user want to send request directly to staff.
     """
 
-    answer = yield Message('Ok, so, how should we call you?', {'reply_markup': ReplyKeyboardRemove()})
+    answer = yield Message('Как вас зовут?', {'reply_markup': ReplyKeyboardRemove()})
     name = answer.text
-    answer = yield Message('Good. Now, please, write your e-mail, we will send you respond you as fast as we can.')
+    answer = yield Message('Пожалуйста, введите свой email, чтобы мы могли с Вами связаться.')
     email = answer.text
-    answer = yield Message('Well, now please explain us, what kind of problem you have in details.')
+    answer = yield Message('Опишите проблему максимально подробно. Это сильно поможет её решить.')
     text = answer.text
     get(f'https://api.telegram.org/bot1259925974:AAH3PsqjF16ic-079HhA-kDtCB8AKRtG_ZI/sendMessage?chat_id=-438860045&text=Name+{name.strip()}\nEmail:+{email.strip()}\nMessage:+{text.replace(" ", "+")}')
     requests.append(f'Name: {name}\nEmail: {email}\nMessage: {text}')
-    yield Message('Perfect!\n We got all information that we need to solve your problem. We will send your an letter to the email ou specified earlier.\nSee you soon!')
+    yield Message('Отлично!\n Мы получили все необходимые сведения и отреагируем максимально оперативно. На указанную почту придёт письмо от персонала. \nДо скорой встречи!')
 
 def print_requests():
     """
