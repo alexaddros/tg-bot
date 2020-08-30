@@ -89,11 +89,14 @@ def error_number_grab():
 
     answer = yield Message("Введите номер ошибки", {'reply_markup': ReplyKeyboardRemove()})
     num = answer.text
-    con = pymysql.connect('localhost', 'root', 'Koordinator1414a', 'TestBase')
-    cur = con.cursor()
-    cur.execute(f"SELECT * FROM Errors WHERE Number={num}")
-    record = cur.fetchone()
-    con.close()
+    try:
+        con = pymysql.connect('localhost', 'root', 'Koordinator1414a', 'TestBase')
+        cur = con.cursor()
+        cur.execute(f"SELECT * FROM Errors WHERE Number={num}")
+        record = cur.fetchone()
+        con.close()
+    except Exception as error:
+        print(error)
 
     try:
         answer = yield Message(f'Number: {record[1]}\nDescription: {record[2]}\nHow to fix: {record[3]}')
@@ -127,5 +130,8 @@ def print_requests():
 
 
 if __name__ == "__main__":
-    dialog_bot = DialogBot('1259925974:AAH3PsqjF16ic-079HhA-kDtCB8AKRtG_ZI', dialog)
-    dialog_bot.start()
+    try:
+        dialog_bot = DialogBot('1259925974:AAH3PsqjF16ic-079HhA-kDtCB8AKRtG_ZI', dialog)
+        dialog_bot.start()
+    except Exception as error:
+        print(error)
