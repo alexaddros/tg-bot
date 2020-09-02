@@ -61,6 +61,8 @@ class DialogBot(object):
                 bot.sendMessage(chat_id=chat_id, text=answer.text)
             else:
                 args = answer.args
+                if 'webhook_disable' in args.keys():
+                    bot.deleteWebHook()
                 bot.sendMessage(chat_id=chat_id, text=answer.text, **args)
 
         # bot.sendMessage(chat_id=274354611, text=answer)
@@ -117,7 +119,7 @@ def support_request():
     text = answer.text
     get(f'https://api.telegram.org/bot1259925974:AAH3PsqjF16ic-079HhA-kDtCB8AKRtG_ZI/sendMessage?chat_id=-438860045&text=Name+{name.strip()}\nEmail:+{email.strip()}\nMessage:+{text.replace(" ", "+")}')
     requests.append(f'Name: {name}\nEmail: {email}\nMessage: {text}')
-    yield Message('Отлично!\n Мы получили все необходимые сведения и отреагируем максимально оперативно. На указанную почту придёт письмо от персонала. \nДо скорой встречи!')
+    yield Message('Отлично!\n Мы получили все необходимые сведения и отреагируем максимально оперативно. На указанную почту придёт письмо от персонала. \nДо скорой встречи!', {'webhook_disable': True})
 
 def print_requests():
     """
